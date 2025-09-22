@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Редактирай Пациент</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f7f9fc;
+        color: #333;
+    }
+    .form-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+    .btn-primary {
+        background-color: #ff5722;
+        color: #fff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        transition: background-color 0.3s;
+    }
+    .btn-primary:hover {
+        background-color: #e64a19;
+    }
+    input, select {
+        border-radius: 0.5rem;
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        width: 100%;
+        transition: box-shadow 0.3s;
+    }
+    input:focus, select:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #ffb380, 0 0 0 4px #ff5722;
+    }
+  </style>
+</head>
+<body>
+<div class="form-container">
+  <h1 class="text-3xl font-bold text-gray-800 text-center mb-8">Редактирай пациент</h1>
+  <form th:action="@{/patients/edit/{id}(id=${patient.id})}" th:object="${patient}" method="post" enctype="multipart/form-data" class="space-y-6">
+    <input type="hidden" th:field="*{id}">
+    <div>
+      <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Име</label>
+      <input type="text" id="name" th:field="*{name}" required>
+    </div>
+    <div>
+      <label for="surname" class="block text-sm font-medium text-gray-700 mb-1">Фамилия</label>
+      <input type="text" id="surname" th:field="*{surname}" required>
+    </div>
+    <div>
+      <label for="egn" class="block text-sm font-medium text-gray-700 mb-1">ЕГН</label>
+      <input type="text" id="egn" th:field="*{egn}" required>
+    </div>
+    <div>
+      <label for="imageFile" class="block text-sm font-medium text-gray-700 mb-1">Снимка</label>
+      <input type="file" id="imageFile" name="imageFile" class="p-2">
+      <div th:if="${patient.image}">
+        <img th:src="'data:image/jpeg;base64,' + ${patient.image}" alt="Current Image" class="w-32 h-32 object-cover rounded-lg mt-4">
+      </div>
+    </div>
+    <div>
+      <label for="benefits" class="block text-sm font-medium text-gray-700 mb-1">Придобивки</label>
+      <select id="benefits" th:field="*{benefits}" multiple class="block w-full rounded-md shadow-sm">
+        <option th:value="'benefit1_id'" th:text="'Консултация с физиотерапевт'"></option>
+        <option th:value="'benefit2_id'" th:text="'Рехабилитационна програма'"></option>
+      </select>
+    </div>
+    <div>
+      <button type="submit" class="btn-primary w-full">Запази промените</button>
+    </div>
+  </form>
+</div>
+</body>
+</html>
