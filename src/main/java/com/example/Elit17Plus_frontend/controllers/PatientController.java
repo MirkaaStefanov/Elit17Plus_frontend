@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -78,31 +79,64 @@ public class PatientController {
         return "redirect:/patients";
     }
 
+    @GetMapping("/{id}")
+    public String getPatient(@PathVariable UUID id, HttpServletRequest request, Model model){
+        String token = (String) request.getSession().getAttribute("sessionToken");
+        PatientDTO dto = patientClient.getPatientById(id, token);
+        model.addAttribute("patient", dto);
+        return "Patient/patient";
+
+    }
+
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable UUID id, HttpServletRequest request, Model model) {
         String token = (String) request.getSession().getAttribute("sessionToken");
         PatientDTO dto = patientClient.getPatientById(id, token);
+
+        // Populate benefitIds from the patient's existing benefits for the form to display correctly
+        if (dto.getBenefits() != null) {
+            List<UUID> benefitIds = dto.getBenefits().stream()
+                    .map(BenefitDTO::getId)
+                    .collect(Collectors.toList());
+            dto.setBenefitIds(benefitIds);
+        }
+
+        List<BenefitDTO> benefits = benefitClient.getAll(token);
         model.addAttribute("patient", dto);
+        model.addAttribute("benefits", benefits);
         return "Patient/edit";
     }
 
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable UUID id, @ModelAttribute PatientDTO patientDTO, HttpServletRequest request) {
+    public String update(@PathVariable UUID id, @ModelAttribute PatientDTO patientDTO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String token = (String) request.getSession().getAttribute("sessionToken");
         PatientDTO existing = patientClient.getPatientById(id, token);
         existing.setName(patientDTO.getName());
         existing.setSurname(patientDTO.getSurname());
         existing.setEgn(patientDTO.getEgn());
+
+        // Update benefits based on the submitted list of IDs
+        if (patientDTO.getBenefitIds() != null && !patientDTO.getBenefitIds().isEmpty()) {
+            List<BenefitDTO> selectedBenefits = patientDTO.getBenefitIds().stream()
+                    .map(benefitId -> benefitClient.getBenefitById(benefitId, token))
+                    .collect(Collectors.toList());
+            existing.setBenefits(selectedBenefits);
+        } else {
+            // If no benefits are selected, clear the list
+            existing.setBenefits(new ArrayList<>());
+        }
+
         try {
             if (patientDTO.getImageFile() != null && !patientDTO.getImageFile().isEmpty()) {
                 byte[] bytes = patientDTO.getImageFile().getBytes();
                 existing.setImage(Base64.getEncoder().encodeToString(bytes));
             }
         } catch (Exception ignored) {}
-        patientClient.update(id, existing, token);
-        return "redirect:/patients";
-    }
 
+        patientClient.update(id, existing, token);
+        redirectAttributes.addFlashAttribute("successMessage", "Patient updated successfully!");
+        return "redirect:/patients/"+id;
+    }
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable UUID id, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String token = (String) request.getSession().getAttribute("sessionToken");

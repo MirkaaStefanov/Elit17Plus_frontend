@@ -8,95 +8,261 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
   <style>
+    :root {
+        --color-primary-red: #ff5722;
+        --color-secondary-blue: #007bff;
+        --color-accent-green: #9acd32;
+        --color-light-bg: #f7f9fc;
+        --color-card-bg: #ffffff;
+        --color-text-dark: #333;
+        --color-text-light: #666;
+        --border-radius-lg: 1.5rem;
+        --border-radius-md: 0.75rem;
+        --box-shadow-subtle: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
     body {
         font-family: 'Poppins', sans-serif;
-        background-color: #f7f9fc;
-        color: #333;
+        background-color: #f0f4f7;
+        color: var(--color-text-dark);
     }
     .form-container {
-        max-width: 600px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background-color: #fff;
-        border-radius: 1rem;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        max-width: 650px;
+        margin: 3rem auto;
+        padding: 2.5rem;
+        background-color: var(--color-card-bg);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--box-shadow-subtle);
+        border-top: 5px solid var(--color-primary-red);
+        transition: transform 0.3s ease-in-out;
     }
-    .btn-primary {
-        background-color: #ff5722;
-        color: #fff;
-        padding: 0.75rem 1.5rem;
-        border-radius: 9999px;
+    .form-container:hover {
+        transform: translateY(-5px);
+    }
+    .logo-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .logo-header img {
+        max-width: 150px;
+        height: auto;
+        animation: fadeIn 1s ease-in-out;
+    }
+    .form-title {
+        color: var(--color-primary-red);
+        text-align: center;
+        font-weight: 700;
+        font-size: 2.25rem;
+        margin-bottom: 1.5rem;
+    }
+    .form-subtitle {
+        text-align: center;
+        color: var(--color-text-light);
+        margin-bottom: 2.5rem;
+    }
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+    label {
+        display: block;
+        font-size: 0.875rem;
         font-weight: 600;
-        transition: background-color 0.3s;
+        color: var(--color-text-dark);
+        margin-bottom: 0.5rem;
     }
-    .btn-primary:hover {
-        background-color: #e64a19;
-    }
-    input, select {
-        border-radius: 0.5rem;
+    input[type="text"],
+    input[type="number"], /* If you have number inputs */
+    select {
+        border-radius: var(--border-radius-md);
         border: 1px solid #ddd;
-        padding: 0.75rem;
+        padding: 0.9rem 1.2rem; /* Increased padding */
         width: 100%;
-        transition: box-shadow 0.3s;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        color: var(--color-text-dark); /* Ensure text color is dark */
+        background-color: var(--color-light-bg); /* Slightly off-white background */
     }
-    input:focus, select:focus {
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus {
         outline: none;
-        box-shadow: 0 0 0 2px #ffb380, 0 0 0 4px #ff5722;
+        border-color: var(--color-primary-red); /* Changed focus color to red */
+        box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.2); /* Red shadow */
+        background-color: var(--color-card-bg); /* White background on focus */
+    }
+
+    /* Custom File Input Styling */
+    .file-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1rem; /* Space between button and file name */
+        flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    }
+    .file-input-button {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1.25rem;
+        background-color: var(--color-secondary-blue); /* Use secondary blue for upload button */
+        color: #fff;
+        border-radius: var(--border-radius-md);
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-weight: 500;
+        box-shadow: 0 2px 10px rgba(0, 123, 255, 0.15);
+    }
+    .file-input-button:hover {
+        background-color: #0056b3; /* Darker blue on hover */
+        transform: translateY(-1px);
+    }
+    .file-input-button i {
+        margin-right: 0.5rem;
+    }
+    #imageFile {
+        display: none; /* Hide the actual file input */
+    }
+    .file-name {
+        font-size: 0.9rem;
+        color: var(--color-text-light);
+        flex-grow: 1; /* Allows it to take available space */
+        padding: 0.5rem 0;
+    }
+    .file-name:empty:before {
+        content: "Няма избран файл"; /* Placeholder text when no file is chosen */
+        color: #aaa;
+    }
+
+    .btn-submit {
+        background-color: var(--color-primary-red);
+        color: #fff;
+        padding: 1rem 1.5rem;
+        border-radius: 9999px;
+        font-weight: 700;
+        transition: background-color 0.3s, transform 0.3s;
+        box-shadow: 0 4px 15px rgba(255, 87, 34, 0.25);
+        width: 100%;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-submit:hover {
+        background-color: #e64a19;
+        transform: translateY(-2px);
     }
     .checkbox-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 1rem;
     }
     .checkbox-item {
         display: flex;
         align-items: center;
-        background-color: #f7f9fc;
-        padding: 0.75rem;
-        border-radius: 0.5rem;
+        background-color: var(--color-light-bg);
+        padding: 0.75rem 1rem;
+        border-radius: var(--border-radius-md);
         border: 1px solid #ddd;
-        transition: border-color 0.3s, background-color 0.3s;
+        transition: all 0.3s ease;
+        cursor: pointer;
     }
     .checkbox-item:hover {
-        border-color: #ff5722;
-        background-color: #fff;
+        border-color: var(--color-accent-green);
+        background-color: #eef2f5;
+    }
+    .checkbox-item input[type="checkbox"] {
+        margin-right: 0.75rem;
+        appearance: none;
+        -webkit-appearance: none;
+        width: 1.2rem;
+        height: 1.2rem;
+        border: 2px solid #ccc;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s;
+    }
+    .checkbox-item input[type="checkbox"]:checked {
+        background-color: var(--color-accent-green);
+        border-color: var(--color-accent-green);
+    }
+    .checkbox-item input[type="checkbox"]:checked:before {
+        content: '✔';
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.9rem;
+    }
+    .checkbox-item label {
+        margin: 0;
+        font-weight: 500;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
+
+<div th:insert="~{fragments/header :: main-header}"></div>
+
 <div class="form-container">
-  <h1 class="text-3xl font-bold text-gray-800 text-center mb-8">Добави нов пациент</h1>
+  <div class="logo-header">
+    <img th:src="@{/images/logo.png}" alt="Лого на ЕАХГ" class="w-36 h-auto mx-auto mb-4"/>
+  </div>
+  <h1 class="form-title">Добави нов пациент</h1>
+  <p class="form-subtitle">Моля, попълнете информацията по-долу, за да създадете нов запис.</p>
+
   <form th:action="@{/patients/create}" th:object="${patient}" method="post" enctype="multipart/form-data" class="space-y-6">
-    <div>
-      <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Име</label>
+    <div class="input-group">
+      <label for="name">Име</label>
       <input type="text" id="name" th:field="*{name}" required>
     </div>
-    <div>
-      <label for="surname" class="block text-sm font-medium text-gray-700 mb-1">Фамилия</label>
+    <div class="input-group">
+      <label for="surname">Фамилия</label>
       <input type="text" id="surname" th:field="*{surname}" required>
     </div>
-    <div>
-      <label for="egn" class="block text-sm font-medium text-gray-700 mb-1">ЕГН</label>
+    <div class="input-group">
+      <label for="egn">ЕГН</label>
       <input type="text" id="egn" th:field="*{egn}" required>
     </div>
-    <div>
-      <label for="imageFile" class="block text-sm font-medium text-gray-700 mb-1">Снимка</label>
-      <input type="file" id="imageFile" name="imageFile" class="p-2">
+
+    <div class="input-group">
+      <label>Снимка</label>
+      <div class="file-input-wrapper">
+        <input type="file" id="imageFile" name="imageFile" onchange="updateFileName(this)">
+        <label for="imageFile" class="file-input-button">
+          <i class="fas fa-camera"></i> Избери файл
+        </label>
+        <span id="fileNameDisplay" class="file-name"></span>
+      </div>
     </div>
-    <div>
-      <label class="block text-sm font-medium text-gray-700 mb-2">Придобивки</label>
+
+    <div class="input-group">
+      <label class="block mb-2">Придобивки</label>
       <div class="checkbox-container">
         <div th:each="benefit : ${benefits}" class="checkbox-item">
           <input type="checkbox" name="benefitIds" th:value="${benefit.id}" th:id="${'benefit-' + benefit.id}" class="h-4 w-4 text-orange-600 border-gray-300 rounded focus:ring-orange-500">
-          <label th:for="${'benefit-' + benefit.id}" class="ml-2 text-sm text-gray-700" th:text="${benefit.name}"></label>
+          <label th:for="${'benefit-' + benefit.id}" th:text="${benefit.name}"></label>
         </div>
       </div>
     </div>
     <div>
-      <button type="submit" class="btn-primary w-full">Запази</button>
+      <button type="submit" class="btn-submit">Запази</button>
     </div>
   </form>
 </div>
+
+<script>
+  function updateFileName(input) {
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      if (input.files && input.files.length > 0) {
+          fileNameDisplay.textContent = input.files[0].name;
+      } else {
+          fileNameDisplay.textContent = ""; // Clear if no file is selected
+      }
+  }
+</script>
 </body>
 </html>
