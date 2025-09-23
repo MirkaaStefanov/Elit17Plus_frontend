@@ -1,25 +1,15 @@
-<footer th:fragment="main-footer" class="w-full bg-gray-800 text-white py-8">
-  <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-4 sm:px-6 lg:px-8">
-    <div class="footer-logo mb-4 md:mb-0">
-      <img th:src="@{/images/logo.png}" alt="Elit 17 Plus Logo" class="h-12 w-auto">
+<footer th:fragment="main-footer" class="bg-gray-800 text-gray-300 py-10 sm:py-12">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="mb-4 inline-block">
+      <img th:src="@{/images/logo.png}" alt="Elit 17 Plus Logo" class="h-16 w-auto mx-auto">
     </div>
-    <div class="footer-contact text-center md:text-left mb-4 md:mb-0">
-      <p class="text-sm">elit17plus.bg</p>
-      <p class="text-xs text-gray-400">Рехабилитационен център</p>
-    </div>
-    <div class="social-links flex space-x-4">
-      <a href="#"><img src="
 
-http://googleusercontent.com/image_collection/image_retrieval/12916526491282820811
-" alt="Facebook" class="h-6 w-6"></a>
-      <a href="#"><img src="
+    <p class="text-sm">&copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}">2024</span> Elit 17 Plus. All rights reserved.</p>
 
-http://googleusercontent.com/image_collection/image_retrieval/10923329386338155171
-" alt="Twitter" class="h-6 w-6"></a>
-      <a href="#"><img src="
-
-http://googleusercontent.com/image_collection/image_retrieval/1447659015658646289
-" alt="Instagram" class="h-6 w-6"></a>
+    <div class="mt-4 flex justify-center space-x-4 text-gray-400">
+      <a href="#" class="hover:text-white transition-colors">Facebook</a>
+      <a href="#" class="hover:text-white transition-colors">Instagram</a>
+      <a href="#" class="hover:text-white transition-colors">TikTok</a>
     </div>
   </div>
 </footer>

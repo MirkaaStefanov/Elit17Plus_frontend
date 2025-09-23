@@ -23,7 +23,6 @@ public class PatientDTO {
     private String egn; // ЕГН
     private String name;
     private String surname;
-    private List<VisitDTO> visits = new ArrayList<>();
     private LocalDate lastVisitDate;
     private List<BenefitDTO> benefits = new ArrayList<>();
     private String image;

@@ -28,13 +28,19 @@ public class BenefitController {
     @GetMapping
     public String getAll(HttpServletRequest request, Model model) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         List<BenefitDTO> benefits = benefitClient.getAll(token);
         model.addAttribute("benefits", benefits);
         return "Benefit/all";
     }
 
     @GetMapping("/create")
-    public String createForm(Model model) {
+    public String createForm(Model model, HttpServletRequest request) {
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         model.addAttribute("benefit", new BenefitDTO());
         return "Benefit/form";
     }
@@ -42,6 +48,9 @@ public class BenefitController {
     @PostMapping("/create")
     public String create(@ModelAttribute BenefitDTO dto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         try {
             benefitClient.createBenefit(dto, token);
             redirectAttributes.addFlashAttribute("successMessage", "Benefit created successfully!");
@@ -54,6 +63,9 @@ public class BenefitController {
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable UUID id, HttpServletRequest request, Model model) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         BenefitDTO dto = benefitClient.getBenefitById(id, token);
         model.addAttribute("benefit", dto);
         return "Benefit/edit";
@@ -62,6 +74,9 @@ public class BenefitController {
     @PostMapping("/edit/{id}")
     public String update(@PathVariable UUID id, @ModelAttribute BenefitDTO dto, HttpServletRequest request) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         benefitClient.updateBenefit(id, dto, token);
         return "redirect:/benefits";
     }
@@ -69,6 +84,9 @@ public class BenefitController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable UUID id, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         try {
             benefitClient.deleteBenefit(id, token);
             redirectAttributes.addFlashAttribute("successMessage", "Benefit deleted successfully!");

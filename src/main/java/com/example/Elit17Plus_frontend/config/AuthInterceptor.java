@@ -31,7 +31,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 requestURI.equals("/services") ||
                 requestURI.startsWith("/appointments/calendar/") ||
                 requestURI.startsWith("/appointments/select_worker/") ||
-                requestURI.startsWith("/images/")) {
+                requestURI.startsWith("/")) {
             return true;
         }
 

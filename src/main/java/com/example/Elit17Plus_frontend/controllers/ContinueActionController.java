@@ -24,8 +24,6 @@
 //@RequestMapping
 //public class ContinueActionController {
 //
-//    private final AppointmentClient appointmentClient;
-//    private final ShoppingCartClient shoppingCartClient;
 //
 //    @GetMapping("/continue-action")
 //    public ModelAndView continueAction(HttpServletRequest request) {

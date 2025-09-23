@@ -7,8 +7,220 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-primary-orange: #ff5722;
+            --color-primary-blue: #007bff;
+            --color-accent-green: #9acd32;
+            --color-light-bg: #f7f9fc;
+            --color-card-bg: #ffffff;
+            --color-text-dark: #333;
+            --color-text-light: #666;
+            --border-radius-lg: 1.5rem;
+            --border-radius-md: 0.75rem;
+            --box-shadow-subtle: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-light-bg);
+            color: var(--color-text-dark);
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .hero-section {
+            background-image: linear-gradient(to bottom, #d6eaff, #f7f9fc);
+            position: relative;
+            padding-bottom: 8rem;
+            overflow: hidden;
+        }
+        .hero-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 120px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23f7f9fc' d='M0,0 L1200,0 L1200,120 L0,120 Z'/%3E%3Cpath fill='%23fff' d='M0,0 C300,60 500,60 800,0 S1200,60 1200,60 L1200,120 L0,120 L0,0 Z'/%3E%3C/svg%3E") no-repeat center;
+            background-size: cover;
+        }
+        .hero-content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 4rem;
+            text-align: center;
+        }
+        @media (min-width: 768px) {
+            .hero-content-wrapper {
+                flex-direction: row;
+                text-align: left;
+                padding-top: 6rem;
+            }
+        }
+        .hero-content {
+            margin-bottom: 2rem;
+            flex: 1;
+        }
+        .hero-content h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-primary-blue);
+            line-height: 1.2;
+        }
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-top: 1rem;
+            color: var(--color-text-light);
+        }
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--color-primary-orange);
+            color: #fff;
+            padding: 1rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            margin-top: 2rem;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.25);
+        }
+        .btn-primary:hover {
+            background-color: #e64a19;
+            transform: translateY(-2px);
+        }
+        .hero-image {
+            position: relative;
+            max-width: 800px;
+            flex: 1;
+        }
+        .hero-image img {
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--box-shadow-subtle);
+        }
+        .rating-box {
+            position: absolute;
+            bottom: -2rem;
+            right: 1rem;
+            background-color: var(--color-card-bg);
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            box-shadow: var(--box-shadow-subtle);
+            text-align: center;
+            border-top: 3px solid var(--color-accent-green);
+        }
+        .rating-box p {
+            font-size: 0.875rem;
+            color: var(--color-text-light);
+        }
+        .services-overview {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 2rem;
+            padding: 4rem 1rem;
+            text-align: center;
+            margin-top: -6rem;
+        }
+        @media (min-width: 768px) {
+            .services-overview {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .service-item {
+            background-color: var(--color-card-bg);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-top: 3px solid transparent;
+            transition: transform 0.3s, border-top 0.3s;
+        }
+        .service-item:hover {
+            transform: translateY(-5px);
+            border-top: 3px solid var(--color-primary-orange);
+        }
+        .service-item.highlight {
+            background-color: var(--color-accent-green);
+            color: #fff;
+            transform: translateY(-10px);
+            border-top: 3px solid transparent;
+            box-shadow: 0 8px 20px rgba(154, 205, 50, 0.2);
+        }
+        .service-item.highlight h3 {
+            color: #fff;
+        }
+        .service-item.highlight:hover {
+            background-color: #7aa526;
+            border-top: 3px solid #fff;
+        }
+        .service-item img {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+        }
+        .our-services {
+            padding: 4rem 1rem;
+        }
+        .our-services h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-primary-blue);
+            margin-bottom: 3rem;
+        }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 2rem;
+        }
+        @media (min-width: 640px) {
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (min-width: 1024px) {
+            .services-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .service-card {
+            background-color: var(--color-card-bg);
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+        }
+        .card-image-container {
+            height: 200px;
+            overflow: hidden;
+        }
+        .card-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .service-card:hover .card-image-container img {
+            transform: scale(1.1);
+        }
+        .service-card h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            padding: 1.5rem 1rem;
+            color: var(--color-text-dark);
+        }
+        .doctor-mascot {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            padding: 1rem;
+        }
+    </style>
 </head>
 <body>
 
@@ -16,76 +228,67 @@
 
 <main>
     <section class="hero-section">
-        <div class="hero-content">
-            <h1>ЕЛИТ 17 плюс® –<br>Вашият партньор мартор<br>в здравеопазването</h1>
-            <p>Предлагаме широк избор от медицински и рехабилитационни услуги за дома.</p>
-            <a href="#" class="btn-primary">Виж повече</a>
-        </div>
-        <div class="hero-image">
-            <img src="
-
-http://googleusercontent.com/image_collection/image_retrieval/17909940471675695465
-" alt="Clinic Interior">
-            <div class="rating-box">
-                <img src="
-
-http://googleusercontent.com/image_collection/image_retrieval/5917149618722964173
-" alt="5 Stars">
-                <p>Отлични оценки от нашите доволни клиенти</p>
+        <div class="container hero-content-wrapper">
+            <div class="hero-content">
+                <h1>ЕЛИТ 17 плюс® –<br>Вашият партньор<br>в здравеопазването</h1>
+                <p>Предлагаме широк избор от медицински и рехабилитационни услуги за дома.</p>
+                <a href="#our-services" class="btn-primary">Виж повече</a>
+            </div>
+            <div class="hero-image mt-8 md:mt-0">
+                <img src="https://images.unsplash.com/photo-1628348554167-9387a2754641?q=80&w=1974&auto=format&fit=crop" alt="Modern clinic interior">
+                <div class="rating-box hidden md:block">
+                    <img src="https://i.imgur.com/G20Ww6y.png" alt="5 Stars" class="w-24 h-auto mx-auto mb-1">
+                    <p>Отлични оценки от нашите доволни клиенти</p>
+                </div>
             </div>
         </div>
+        <div class="hero-wave"></div>
     </section>
-    <section class="services-overview">
-        <div class="service-item">
-            <img src="
 
-http://googleusercontent.com/image_collection/image_retrieval/16302862625955281493
-" alt="Specialist Icon">
+    <section class="services-overview container">
+        <div class="service-item">
+            <img src="https://i.imgur.com/b9n9x7X.png" alt="Specialist Icon">
             <h3>Екип от специалисти</h3>
         </div>
         <div class="service-item highlight">
-            <img src="http://googleusercontent.com/image_collection/image_retrieval/7491242519947464943" alt="Program Icon">
+            <img src="https://i.imgur.com/m6T4W5K.png" alt="Program Icon">
             <h3>Индивидуални програми</h3>
         </div>
         <div class="service-item">
-            <img src="
-
-http://googleusercontent.com/image_collection/image_retrieval/2190800598012190709
-" alt="Equipment Icon">
+            <img src="https://i.imgur.com/vH1y3kL.png" alt="Equipment Icon">
             <h3>Модерно оборудване</h3>
         </div>
     </section>
-    <section class="our-services">
+
+    <section id="our-services" class="our-services container">
         <h2>Нашите услуги</h2>
         <div class="services-grid">
             <div class="service-card">
                 <div class="card-image-container">
-                    <img src="http://googleusercontent.com/image_collection/image_retrieval/10803964313135507719" alt="Physiotherapy">
+                    <img src="https://images.unsplash.com/photo-1579684385108-a400f6f70a1e?q=80&w=1964&auto=format&fit=crop" alt="Physiotherapy">
                 </div>
                 <h4>Физиотерапия</h4>
             </div>
             <div class="service-card">
                 <div class="card-image-container">
-                    <img src="http://googleusercontent.com/image_collection/image_retrieval/14446648533949878976" alt="Rehabilitators">
+                    <img src="https://images.unsplash.com/photo-1628348554167-9387a2754641?q=80&w=1974&auto=format&fit=crop" alt="Rehabilitators">
                 </div>
                 <h4>Рехабилитатори</h4>
             </div>
             <div class="service-card">
                 <div class="card-image-container">
-                    <img src="http://googleusercontent.com/image_collection/image_retrieval/749839603414274763" alt="Kinesitherapy">
+                    <img src="https://images.unsplash.com/photo-1596773087364-5867195d733f?q=80&w=2070&auto=format&fit=crop" alt="Kinesitherapy">
                 </div>
                 <h4>Кинезитерапия</h4>
             </div>
             <div class="service-card">
-                <img src="
-
-http://googleusercontent.com/image_collection/image_retrieval/7931976615440921768
-" alt="Doctor Mascot" class="doctor-mascot">
-                <h4>Ние се грижим за вашето здраве!</h4>
+                <img src="https://i.imgur.com/v2JvP9C.png" alt="Doctor Mascot" class="doctor-mascot">
+                <h4 class="mt-4">Ние се грижим за вашето здраве!</h4>
             </div>
         </div>
     </section>
 </main>
 <div th:insert="~{fragments/footer :: main-footer}"></div>
+
 </body>
 </html>

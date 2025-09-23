@@ -1,63 +1,84 @@
-<header th:fragment="main-header" class="w-full bg-white shadow-md py-4">
-  <nav class="container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
-    <a th:href="@{/}" class="flex items-center">
-      <img th:src="@{/images/logo.png}" alt="Elit 17 Plus Logo" class="h-12 w-auto">
-    </a>
-    <div class="hidden md:flex items-center space-x-8 lg:space-x-12">
-      <div class="flex items-center space-x-6 lg:space-x-10 text-gray-800 font-medium">
-        <a th:href="@{/}" class="hover:text-gray-500 transition-colors">Начало</a>
-        <a th:href="@{/#about}" class="hover:text-gray-500 transition-colors">За нас</a>
-        <a th:href="@{/#services}" class="hover:text-gray-500 transition-colors">Услуги</a>
-      </div>
-      <a th:href="@{/appointments/new}" class="bg-orange-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition-colors">Онлайн записване</a>
+<header th:fragment="main-header" class="w-full bg-white shadow-md py-4" xmlns:th="http://www.w3.org/1999/xhtml">
+    <nav class="container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        <a th:href="@{/}" class="flex items-center">
+            <img th:src="@{/images/logo.png}" alt="Elit 17 Plus Logo" class="h-12 w-auto">
+        </a>
+        <div class="hidden md:flex items-center space-x-8 lg:space-x-12">
+            <th:block th:if="${session.sessionToken != null and session.sessionRole == 'ADMIN'}">
+                <a th:href="@{/patients}" class="hover:text-gray-500 transition-colors">Пациенти</a>
+                <a th:href="@{/benefits}" class="hover:text-gray-500 transition-colors">Придобивки</a>
+            </th:block>
+            <th:block th:if="${session.sessionToken == null }">
+                <div class="flex items-center space-x-6 lg:space-x-10 text-gray-800 font-medium">
+                    <a th:href="@{/}" class="hover:text-gray-500 transition-colors">Начало</a>
+                    <a th:href="@{/#about}" class="hover:text-gray-500 transition-colors">За нас</a>
+                    <a th:href="@{/#services}" class="hover:text-gray-500 transition-colors">Услуги</a>
+                </div>
+                <a th:href="@{/auth/login}"
+                   class="bg-orange-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition-colors">Впиши
+                    се</a>
+            </th:block>
+            <th:block th:if="${session.sessionToken != null }">
+                <a th:href="@{/auth/logout}"  class="bg-orange-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-orange-600 transition-colors">Излез</a>
+            </th:block>
+
+
+        </div>
+        <div class="md:hidden flex items-center space-x-4">
+            <a th:href="@{/appointments/new}"
+               class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-orange-600 transition-colors">Записване</a>
+            <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                     stroke="currentColor" class="w-8 h-8">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+    <div id="mobile-menu"
+         class="hidden fixed top-0 left-0 w-full h-screen bg-white bg-opacity-95 flex flex-col items-center justify-center space-y-8 z-50 transition-transform duration-500 ease-in-out">
+        <button id="close-menu-button" class="absolute top-6 right-6 text-gray-800 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                 stroke="currentColor" class="w-8 h-8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+        <div class="mb-8">
+            <img th:src="@{/images/logo.png}" alt="Elit 17 Plus Logo" class="h-16 w-auto mx-auto">
+        </div>
+        <a th:href="@{/}" class="text-gray-800 text-3xl font-semibold hover:text-gray-500 transition-colors">Начало</a>
+        <a th:href="@{/#about}" class="text-gray-800 text-3xl font-semibold hover:text-gray-500 transition-colors">За
+            нас</a>
+        <a th:href="@{/#services}" class="text-gray-800 text-3xl font-semibold hover:text-gray-500 transition-colors">Услуги</a>
+        <a th:href="@{/appointments/new}"
+           class="mt-8 px-8 py-3 bg-orange-500 text-white text-lg rounded-full font-semibold hover:bg-orange-600 transition-colors">Онлайн
+            записване</a>
     </div>
-    <div class="md:hidden flex items-center space-x-4">
-      <a th:href="@{/appointments/new}" class="bg-orange-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-orange-600 transition-colors">Записване</a>
-      <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-      </button>
-    </div>
-  </nav>
-  <div id="mobile-menu" class="hidden fixed top-0 left-0 w-full h-screen bg-white bg-opacity-95 flex flex-col items-center justify-center space-y-8 z-50 transition-transform duration-500 ease-in-out">
-    <button id="close-menu-button" class="absolute top-6 right-6 text-gray-800 focus:outline-none">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-      </svg>
-    </button>
-    <div class="mb-8">
-      <img th:src="@{/images/logo.png}" alt="Elit 17 Plus Logo" class="h-16 w-auto mx-auto">
-    </div>
-    <a th:href="@{/}" class="text-gray-800 text-3xl font-semibold hover:text-gray-500 transition-colors">Начало</a>
-    <a th:href="@{/#about}" class="text-gray-800 text-3xl font-semibold hover:text-gray-500 transition-colors">За нас</a>
-    <a th:href="@{/#services}" class="text-gray-800 text-3xl font-semibold hover:text-gray-500 transition-colors">Услуги</a>
-    <a th:href="@{/appointments/new}" class="mt-8 px-8 py-3 bg-orange-500 text-white text-lg rounded-full font-semibold hover:bg-orange-600 transition-colors">Онлайн записване</a>
-  </div>
-  <script th:inline="javascript">
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const closeMenuButton = document.getElementById('close-menu-button');
-    if (mobileMenuButton) {
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        });
-    }
-    if (closeMenuButton) {
-            closeMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        });
-    }
-    if (mobileMenu) {
-        const menuLinks = mobileMenu.querySelectorAll('a');
-        menuLinks.forEach(link => {
-            link.addEventListener('click', () => {
+    <script th:inline="javascript">
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+        }
+        if (closeMenuButton) {
+                closeMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
                 document.body.style.overflow = 'auto';
             });
-        });
-    }
-  </script>
+        }
+        if (mobileMenu) {
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                });
+            });
+        }
+    </script>
 </header>

@@ -2,8 +2,10 @@ package com.example.Elit17Plus_frontend.controllers;
 
 import com.example.Elit17Plus_frontend.clients.BenefitClient;
 import com.example.Elit17Plus_frontend.clients.PatientClient;
+import com.example.Elit17Plus_frontend.clients.VisitClient;
 import com.example.Elit17Plus_frontend.dtos.BenefitDTO;
 import com.example.Elit17Plus_frontend.dtos.PatientDTO;
+import com.example.Elit17Plus_frontend.dtos.VisitDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ public class PatientController {
 
     private final PatientClient patientClient;
     private final BenefitClient benefitClient;
+    private final VisitClient visitClient;
 
     @GetMapping
     public String getAllPatients(HttpServletRequest request, Model model) {
@@ -54,6 +57,9 @@ public class PatientController {
     @PostMapping("/create")
     public String create(@ModelAttribute PatientDTO patientDTO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         try {
             if (patientDTO.getImageFile() != null && !patientDTO.getImageFile().isEmpty()) {
                 byte[] bytes = patientDTO.getImageFile().getBytes();
@@ -82,8 +88,13 @@ public class PatientController {
     @GetMapping("/{id}")
     public String getPatient(@PathVariable UUID id, HttpServletRequest request, Model model){
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         PatientDTO dto = patientClient.getPatientById(id, token);
+        List<VisitDTO> visits = visitClient.getForPatient(id, token);
         model.addAttribute("patient", dto);
+        model.addAttribute("visits", visits);
         return "Patient/patient";
 
     }
@@ -91,6 +102,9 @@ public class PatientController {
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable UUID id, HttpServletRequest request, Model model) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         PatientDTO dto = patientClient.getPatientById(id, token);
 
         // Populate benefitIds from the patient's existing benefits for the form to display correctly
@@ -110,6 +124,9 @@ public class PatientController {
     @PostMapping("/edit/{id}")
     public String update(@PathVariable UUID id, @ModelAttribute PatientDTO patientDTO, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         PatientDTO existing = patientClient.getPatientById(id, token);
         existing.setName(patientDTO.getName());
         existing.setSurname(patientDTO.getSurname());
@@ -140,6 +157,9 @@ public class PatientController {
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable UUID id, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String token = (String) request.getSession().getAttribute("sessionToken");
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if (!"ADMIN".equals(role)) return "redirect:/";
+
         try {
             patientClient.deletePatient(id, token);
             redirectAttributes.addFlashAttribute("successMessage", "Patient deleted successfully!");

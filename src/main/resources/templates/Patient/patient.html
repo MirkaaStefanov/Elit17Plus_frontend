@@ -22,11 +22,13 @@
         --border-radius-md: 0.75rem;
         --box-shadow-subtle: 0 8px 30px rgba(0, 0, 0, 0.08);
     }
+
     body {
         font-family: 'Poppins', sans-serif;
         background-color: #f0f4f7;
         color: var(--color-text-dark);
     }
+
     .patient-card {
         max-width: 800px;
         margin: 3rem auto;
@@ -38,9 +40,11 @@
         transition: transform 0.3s ease-in-out;
         position: relative;
     }
+
     .patient-card:hover {
         transform: translateY(-5px);
     }
+
     .patient-header {
         display: flex;
         flex-direction: column;
@@ -50,6 +54,7 @@
         padding-bottom: 1.5rem;
         margin-bottom: 2rem;
     }
+
     .patient-photo {
         width: 150px;
         height: 150px;
@@ -59,34 +64,40 @@
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         margin-bottom: 1.5rem;
     }
+
     .patient-name {
         font-size: 2.5rem;
         font-weight: 700;
         color: var(--color-primary-red);
         line-height: 1.2;
     }
+
     .patient-details-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 1.5rem;
     }
+
     .detail-item {
         background-color: var(--color-light-bg);
         padding: 1.25rem;
         border-radius: var(--border-radius-md);
         border: 1px solid #ddd;
     }
+
     .detail-item .label {
         font-size: 0.875rem;
         font-weight: 600;
         color: var(--color-text-light);
         margin-bottom: 0.25rem;
     }
+
     .detail-item .value {
         font-size: 1.125rem;
         font-weight: 500;
         color: var(--color-text-dark);
     }
+
     .benefits-list {
         list-style: none;
         padding: 0;
@@ -94,6 +105,7 @@
         flex-wrap: wrap;
         gap: 0.75rem;
     }
+
     .benefit-tag {
         background-color: var(--color-accent-green);
         color: white;
@@ -104,15 +116,18 @@
         display: flex;
         align-items: center;
     }
+
     .benefit-tag i {
         margin-right: 0.5rem;
     }
+
     .action-buttons {
         display: flex;
         justify-content: flex-end; /* Align buttons to the right */
         gap: 1.5rem;
         margin-top: 2rem;
     }
+
     .btn {
         padding: 0.75rem 2rem;
         border-radius: 9999px;
@@ -124,20 +139,22 @@
         text-decoration: none;
         text-align: center;
     }
+
     .btn-edit {
         background-color: var(--color-secondary-blue);
         color: #fff;
         box-shadow: 0 4px 15px rgba(0, 123, 255, 0.25);
     }
+
     .btn-edit:hover {
         background-color: #0056b3;
         transform: translateY(-2px);
     }
-    /* Updated styles for the delete button */
+
     .btn-delete {
         background-color: #dc3545;
         color: #fff;
-        padding: 0.75rem 1.5rem; /* Revert to a more normal size */
+        padding: 0.75rem 1.5rem;
         border-radius: 9999px;
         font-weight: 600;
         transition: background-color 0.3s, transform 0.3s;
@@ -145,25 +162,82 @@
         border: none;
         cursor: pointer;
     }
+
     .btn-delete:hover {
         background-color: #c82333;
         transform: translateY(-2px);
     }
+
     .btn-delete i {
-      margin-right: 0.5rem; /* Add back icon margin */
+        margin-right: 0.5rem;
     }
-    /* New styles for the back button */
+
     .back-btn {
-      position: absolute;
-      top: 1.5rem;
-      left: 1.5rem;
-      font-size: 1.5rem;
-      color: var(--color-text-light);
-      transition: color 0.3s ease, transform 0.3s ease;
+        position: absolute;
+        top: 1.5rem;
+        left: 1.5rem;
+        font-size: 1.5rem;
+        color: var(--color-text-light);
+        transition: color 0.3s ease, transform 0.3s ease;
     }
+
     .back-btn:hover {
-      color: var(--color-secondary-blue);
-      transform: translateX(-5px);
+        color: var(--color-secondary-blue);
+        transform: translateX(-5px);
+    }
+
+    .btn-visit {
+        background-color: var(--color-accent-green);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(154, 205, 50, 0.25);
+    }
+
+    .btn-visit:hover {
+        background-color: #7aa526;
+        transform: translateY(-2px);
+    }
+
+    .visits-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 2px solid #eee;
+    }
+
+    .visits-section h2 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: var(--color-text-dark);
+    }
+
+    .visit-list-card {
+        background-color: var(--color-light-bg);
+        padding: 1.5rem;
+        border-radius: var(--border-radius-md);
+        border: 1px solid #ddd;
+    }
+
+    .visit-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .visit-item:last-child {
+        border-bottom: none;
+    }
+
+    .visit-item .date {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--color-text-dark);
+    }
+
+    .visit-item .icon {
+        color: var(--color-secondary-blue);
+        font-size: 1.25rem;
     }
   </style>
 </head>
@@ -172,6 +246,11 @@
 <div th:insert="~{fragments/header :: main-header}"></div>
 
 <div class="patient-card">
+
+  <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+    <span th:text="${errorMessage}"></span>
+  </div>
+
   <a th:href="@{/patients}" class="back-btn" title="Назад към списъка с пациенти">
     <i class="fas fa-arrow-left"></i>
   </a>
@@ -202,15 +281,30 @@
   </div>
 
   <div class="action-buttons">
+    <form th:action="@{/patients/{id}(id=${patient.id})}" method="post">
+      <button type="submit" class="btn btn-visit">
+        <i class="fas fa-calendar-check mr-2"></i> Днес посети
+      </button>
+    </form>
+
     <a th:href="@{/patients/edit/{id}(id=${patient.id})}" class="btn btn-edit">
       <i class="fas fa-edit mr-2"></i> Редактирай
     </a>
-    <form th:action="@{/patients/delete/{id}(id=${patient.id})}" method="post" onsubmit="return confirm('Сигурни ли сте, че искате да изтриете този пациент?');">
-      <button type="submit" class="btn btn-delete">
-        <i class="fas fa-trash-alt mr-2"></i> Изтрий
-      </button>
-    </form>
   </div>
+
+  <div class="visits-section">
+    <h2>История на посещенията</h2>
+    <div class="visit-list-card">
+      <div th:if="${visits.isEmpty()}" class="text-gray-500 text-center py-4">
+        Няма регистрирани посещения.
+      </div>
+      <div th:each="visit : ${visits}" class="visit-item">
+        <span class="date" th:text="${#temporals.format(visit.visitDate, 'dd MMMM yyyy г.')}"></span>
+        <i class="fas fa-notes-medical icon"></i>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 </body>

@@ -19,6 +19,11 @@ public class HomeController {
     @GetMapping("/")
     public String homePage(Model model, HttpServletRequest request){
 
+        String role = (String) request.getSession().getAttribute("sessionRole");
+        if ("ADMIN".equals(role)){
+            return "redirect:/patients";
+        }
+
         return "index";
     }
 }
