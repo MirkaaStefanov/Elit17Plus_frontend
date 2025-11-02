@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -99,12 +100,23 @@ public class PatientController {
 
         try {
             PatientDTO dto = patientClient.getPatientById(id, token);
-            List<VisitDTO> visits = visitClient.getForPatient(id, token);
+
+            // --- СОРТИРАНЕ НА ПОСЕЩЕНИЯ ---
+            // Вземи и сортирай посещенията (най-новите първо)
+            List<VisitDTO> visits = visitClient.getForPatient(id, token)
+                    .stream()
+                    .sorted(Comparator.comparing(VisitDTO::getVisitDate).reversed())
+                    .collect(Collectors.toList());
+            // --- КРАЙ НА СОРТИРАНЕТО ---
+
+
             List<VideoDTO> videos = videoClient.getAllForPatient(id, token);
 
-            // --- ТРАНСФОРМАЦИЯ НА VIDEO DTO ---
+            // --- ТРАНСФОРМАЦИЯ И СОРТИРАНЕ НА ВИДЕА ---
             // Преобразуваме List<VideoDTO> (с 'key') в List<VideoViewModel> (с 'presignedUrl')
+            // И ги сортираме по дата на качване (най-новите първо)
             List<VideoViewModel> videoViewModels = videos.stream()
+                    .sorted(Comparator.comparing(VideoDTO::getUploadDate).reversed()) // <-- СОРТИРАНЕ
                     .map(videoDTO -> {
                         // 1. Вземи 'key' от DTO-то
                         String r2Key = videoDTO.getKey();
@@ -124,8 +136,8 @@ public class PatientController {
             // --- КРАЙ НА ТРАНСФОРМАЦИЯТА ---
 
             model.addAttribute("patient", dto);
-            model.addAttribute("visits", visits);
-            model.addAttribute("videos", videoViewModels); // Подаваме новия списък с ViewModels
+            model.addAttribute("visits", visits); // Подаваме сортирания списък
+            model.addAttribute("videos", videoViewModels); // Подаваме новия, сортиран списък
 
             return "Patient/patient";
 
