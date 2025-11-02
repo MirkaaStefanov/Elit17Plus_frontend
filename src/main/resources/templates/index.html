@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="bg" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ЕЛИТ 17 плюс</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ЕЛИТ 17 плюс - Център за Рехабилитация</title> <!-- Актуализирано заглавие -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
             --color-primary-orange: #ff5722;
             --color-primary-blue: #007bff;
-            --color-accent-green: #9acd32;
             --color-light-bg: #f7f9fc;
             --color-card-bg: #ffffff;
             --color-text-dark: #333;
@@ -20,11 +21,17 @@
             --border-radius-lg: 1.5rem;
             --border-radius-md: 0.75rem;
             --box-shadow-subtle: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --google-red: #DB4437;
+            --google-blue: #4285F4;
+            --google-green: #0F9D58;
+            --google-yellow: #F4B400;
+            --star-color: #ffc107; /* Златен цвят за звезди */
         }
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--color-light-bg);
             color: var(--color-text-dark);
+            line-height: 1.7;
         }
         .container {
             max-width: 1200px;
@@ -43,7 +50,7 @@
             left: 0;
             width: 100%;
             height: 120px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23f7f9fc' d='M0,0 L1200,0 L1200,120 L0,120 Z'/%3E%3Cpath fill='%23fff' d='M0,0 C300,60 500,60 800,0 S1200,60 1200,60 L1200,120 L0,120 L0,0 Z'/%3E%3C/svg%3E") no-repeat center;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'%3E%3Cpath fill='%23f7f9fc' d='M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z' /%3E%3C/svg%3E") no-repeat center bottom;
             background-size: cover;
         }
         .hero-content-wrapper {
@@ -75,6 +82,7 @@
             font-size: 1.25rem;
             margin-top: 1rem;
             color: var(--color-text-light);
+            max-width: 500px;
         }
         .btn-primary {
             display: inline-block;
@@ -86,6 +94,7 @@
             margin-top: 2rem;
             transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0 4px 15px rgba(255, 87, 34, 0.25);
+            text-decoration: none;
         }
         .btn-primary:hover {
             background-color: #e64a19;
@@ -100,6 +109,8 @@
             border-radius: var(--border-radius-md);
             box-shadow: var(--box-shadow-subtle);
         }
+
+        /* --- START: Обновен Rating Box (със Звезди и Google) --- */
         .rating-box {
             position: absolute;
             bottom: -2rem;
@@ -108,13 +119,32 @@
             padding: 1rem 1.5rem;
             border-radius: var(--border-radius-md);
             box-shadow: var(--box-shadow-subtle);
-            text-align: center;
-            border-top: 3px solid var(--color-accent-green);
+            border-top: 3px solid var(--color-primary-orange);
+            min-width: 280px; /* Осигуряваме мин. ширина */
         }
-        .rating-box p {
-            font-size: 0.875rem;
+        .rating-box .stars {
+            color: var(--star-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+        .rating-box .google-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .rating-box .google-rating i {
+            font-size: 1.25rem;
+            color: var(--google-blue);
+        }
+        .rating-box .google-rating p {
+            font-size: 0.9rem;
             color: var(--color-text-light);
+            margin: 0;
+            font-weight: 500;
         }
+        /* --- END: Обновен Rating Box --- */
+
         .services-overview {
             display: grid;
             grid-template-columns: repeat(1, 1fr);
@@ -130,35 +160,100 @@
         }
         .service-item {
             background-color: var(--color-card-bg);
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             border-radius: var(--border-radius-lg);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             border-top: 3px solid transparent;
-            transition: transform 0.3s, border-top 0.3s;
+            transition: transform 0.3s, border-top 0.3s, box-shadow 0.3s;
         }
         .service-item:hover {
             transform: translateY(-5px);
             border-top: 3px solid var(--color-primary-orange);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         }
-        .service-item.highlight {
-            background-color: var(--color-accent-green);
+        .service-item.highlight-blue {
+            background-color: var(--color-primary-blue);
             color: #fff;
             transform: translateY(-10px);
             border-top: 3px solid transparent;
-            box-shadow: 0 8px 20px rgba(154, 205, 50, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.2);
         }
-        .service-item.highlight h3 {
+        .service-item.highlight-blue h3 {
             color: #fff;
         }
-        .service-item.highlight:hover {
-            background-color: #7aa526;
+        .service-item.highlight-blue:hover {
+            background-color: #0056b3;
             border-top: 3px solid #fff;
+            box-shadow: 0 12px 30px rgba(0, 123, 255, 0.3);
         }
-        .service-item img {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 1rem;
+        .service-item i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary-orange);
         }
+        .service-item.highlight-blue i {
+            color: #fff;
+        }
+
+        .how-it-works {
+            padding: 4rem 1rem;
+            background-color: var(--color-card-bg);
+        }
+        .how-it-works h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-primary-blue);
+            margin-bottom: 3rem;
+        }
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .process-steps {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        .step-card {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--color-light-bg);
+            border-radius: var(--border-radius-md);
+            position: relative;
+            border: 1px solid #eee;
+        }
+        .step-card .step-number {
+            position: absolute;
+            top: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--color-primary-orange);
+            color: white;
+            font-weight: 700;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            border: 4px solid var(--color-card-bg);
+            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.2);
+        }
+        .step-card h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-text-dark);
+        }
+        .step-card p {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+        }
+
         .our-services {
             padding: 4rem 1rem;
         }
@@ -190,10 +285,13 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             overflow: hidden;
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
         .service-card:hover {
             transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         }
         .card-image-container {
             height: 200px;
@@ -208,18 +306,117 @@
         .service-card:hover .card-image-container img {
             transform: scale(1.1);
         }
-        .service-card h4 {
+        .service-card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .service-card-content h4 {
             font-size: 1.25rem;
             font-weight: 600;
-            padding: 1.5rem 1rem;
             color: var(--color-text-dark);
+            margin-bottom: 0.75rem;
         }
-        .doctor-mascot {
+        .service-card-content p {
+            font-size: 0.95rem;
+            color: var(--color-text-light);
+            flex-grow: 1;
+        }
+        .btn-secondary {
+            display: inline-block;
+            background-color: var(--color-light-bg);
+            color: var(--color-primary-blue);
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+            border: 1px solid #ddd;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            background-color: var(--color-primary-blue);
+            border-color: var(--color-primary-blue);
+            color: #fff;
+        }
+
+        /* --- START: Нова Секция "Локация и Контакти" --- */
+        .location-contact-section {
+            padding: 4rem 1rem;
+            background-color: var(--color-card-bg);
+        }
+        .location-contact-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-primary-blue);
+            margin-bottom: 3rem;
+        }
+        .location-contact-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 3rem;
+        }
+        @media (min-width: 1024px) {
+            .location-contact-grid {
+                grid-template-columns: repeat(2, 1fr);
+                align-items: flex-start;
+            }
+        }
+        .map-container {
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            border: 1px solid #ddd;
             width: 100%;
-            height: auto;
-            object-fit: contain;
-            padding: 1rem;
+            height: 450px; /* Фиксирана височина за картата */
         }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .contact-form .form-input,
+        .contact-form .form-textarea {
+            border-radius: var(--border-radius-md);
+            border: 1px solid #ddd;
+            padding: 0.9rem 1.2rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            color: var(--color-text-dark);
+            background-color: var(--color-light-bg);
+            margin-bottom: 1.5rem;
+        }
+        .contact-form .form-textarea {
+            resize: vertical;
+            min-height: 140px;
+        }
+        .contact-form .form-input:focus,
+        .contact-form .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-primary-red);
+            box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.2);
+            background-color: var(--color-card-bg);
+        }
+        .btn-submit {
+            background-color: var(--color-primary-orange);
+            color: #fff;
+            padding: 1rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.25);
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background-color: #e64a19;
+            transform: translateY(-2px);
+        }
+        /* --- END: Нова Секция "Локация и Контакти" --- */
+
     </style>
 </head>
 <body>
@@ -230,16 +427,29 @@
     <section class="hero-section">
         <div class="container hero-content-wrapper">
             <div class="hero-content">
-                <h1>ЕЛИТ 17 плюс® –<br>Вашият партньор<br>в здравеопазването</h1>
-                <p>Предлагаме широк избор от медицински и рехабилитационни услуги за дома.</p>
-                <a href="#our-services" class="btn-primary">Виж повече</a>
+                <!-- АКТУАЛИЗИРАН ТЕКСТ: Премахнато "в уюта на Вашия дом" -->
+                <h1>Професионална рехабилитация<br>в нашия модерен център</h1>
+                <p>Нашият екип от специалисти по физиотерапия, кинезитерапия и рехабилитация помага на Вас и Вашите близки да възстановите движението и качеството си на живот.</p>
+                <a href="#our-services" class="btn-primary">Разгледайте услугите</a>
             </div>
             <div class="hero-image mt-8 md:mt-0">
-                <img src="https://images.unsplash.com/photo-1628348554167-9387a2754641?q=80&w=1974&auto=format&fit=crop" alt="Modern clinic interior">
+                <img th:src="@{/images/photo.png}" alt="Модерна апаратура за рехабилитация">
+                <!-- START: Обновен Rating Box (Звезди + Google) -->
                 <div class="rating-box hidden md:block">
-                    <img src="https://i.imgur.com/G20Ww6y.png" alt="5 Stars" class="w-24 h-auto mx-auto mb-1">
-                    <p>Отлични оценки от нашите доволни клиенти</p>
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="google-rating">
+                        <i class="fab fa-google"></i>
+                        <p>Отлични коментари в Google</p>
+                    </div>
                 </div>
+                <!-- END: Обновен Rating Box (Звезди + Google) -->
+
             </div>
         </div>
         <div class="hero-wave"></div>
@@ -247,48 +457,142 @@
 
     <section class="services-overview container">
         <div class="service-item">
-            <img src="https://i.imgur.com/b9n9x7X.png" alt="Specialist Icon">
-            <h3>Екип от специалисти</h3>
+            <i class="fas fa-user-md"></i>
+            <h3>Лицензирани терапевти</h3>
+            <p>Нашият екип се състои само от сертифицирани професионалисти.</p>
         </div>
-        <div class="service-item highlight">
-            <img src="https://i.imgur.com/m6T4W5K.png" alt="Program Icon">
-            <h3>Индивидуални програми</h3>
+        <!-- АКТУАЛИЗИРАНА КАРТА: "Удобство у дома" е сменено с "Индивидуален план" -->
+        <div class="service-item highlight-blue">
+            <i class="fas fa-heart"></i> <!-- Сменена икона -->
+            <h3>Индивидуален план</h3>
+            <p>Получавате персонална грижа, съобразена с Вашите нужди.</p>
         </div>
         <div class="service-item">
-            <img src="https://i.imgur.com/vH1y3kL.png" alt="Equipment Icon">
-            <h3>Модерно оборудване</h3>
+            <i class="fas fa-laptop-medical"></i>
+            <h3>Висококласна апаратура</h3>
+            <p>Използваме модерно оборудване за по-бързи резултати.</p>
         </div>
     </section>
+
+    <section id="how-it-works" class="how-it-works container">
+        <h2>Процесът в 3 стъпки</h2>
+        <div class="process-steps">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h4>Запитване и Консултация</h4>
+                <p>Свързвате се с нас и обсъждаме Вашето състояние и нужди.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h4>Преглед и План</h4>
+                <p>Наш специалист Ви преглежда и изготвя персонализиран план.</p>
+            </div>
+            <!-- АКТУАЛИЗИРАНА СТЪПКА: "Терапия у Дома" е сменена -->
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h4>Терапия в Центъра</h4>
+                <p>Започваме редовни процедури и работим заедно за Вашето възстановяване.</p>
+            </div>
+        </div>
+    </section>
+
 
     <section id="our-services" class="our-services container">
         <h2>Нашите услуги</h2>
         <div class="services-grid">
             <div class="service-card">
                 <div class="card-image-container">
-                    <img src="https://images.unsplash.com/photo-1579684385108-a400f6f70a1e?q=80&w=1964&auto=format&fit=crop" alt="Physiotherapy">
+                    <img src="https://images.unsplash.com/photo-1579684385108-a400f6f70a1e?q=80&w=1964&auto:format&fit=crop" alt="Физиотерапия">
                 </div>
-                <h4>Физиотерапия</h4>
+                <div class="service-card-content">
+                    <h4>Физиотерапия</h4>
+                    <p>Лечение с физикални фактори за намаляване на болката и възпалението.</p>
+                    <a href="#" class="btn-secondary">Научи повече</a>
+                </div>
             </div>
             <div class="service-card">
                 <div class="card-image-container">
-                    <img src="https://images.unsplash.com/photo-1628348554167-9387a2754641?q=80&w=1974&auto=format&fit=crop" alt="Rehabilitators">
+                    <img src="https://images.unsplash.com/photo-1628348554167-9387a2754641?q=80&w=1974&auto:format&fit=crop" alt="Рехабилитация">
                 </div>
-                <h4>Рехабилитатори</h4>
+                <div class="service-card-content">
+                    <h4>Рехабилитация</h4>
+                    <p>Специализирани програми за възстановяване след травми и операции.</p>
+                    <a href="#" class="btn-secondary">Научи повече</a>
+                </div>
             </div>
             <div class="service-card">
                 <div class="card-image-container">
-                    <img src="https://images.unsplash.com/photo-1596773087364-5867195d733f?q=80&w=2070&auto=format&fit=crop" alt="Kinesitherapy">
+                    <img src="https://images.unsplash.com/photo-1596773087364-5867195d733f?q=80&w=2070&auto:format&fit=crop" alt="Кинезитерапия">
                 </div>
-                <h4>Кинезитерапия</h4>
+                <div class="service-card-content">
+                    <h4>Кинезитерапия</h4>
+                    <p>Възстановяване на движението и функцията чрез лечебна гимнастика.</p>
+                    <a href="#" class="btn-secondary">Научи повече</a>
+                </div>
             </div>
             <div class="service-card">
-                <img src="https://i.imgur.com/v2JvP9C.png" alt="Doctor Mascot" class="doctor-mascot">
-                <h4 class="mt-4">Ние се грижим за вашето здраве!</h4>
+                <div class="card-image-container">
+                    <img src="https://images.unsplash.com/photo-1581092580489-c52e1c367f08?q=80&w=2070&auto:format&fit=crop" alt="Ерготерапия">
+                </div>
+                <div class="service-card-content">
+                    <h4>Ерготерапия</h4>
+                    <p>Помагаме на пациентите да възвърнат ежедневните си дейности и независимост.</p>
+                    <a href="#" class="btn-secondary">Научи повече</a>
+                </div>
             </div>
         </div>
     </section>
+
+    <!-- START: НОВА СЕКЦИЯ "ЛОКАЦИЯ И КОНТАКТИ" (Заменя CTA) -->
+    <section id="contact" class="location-contact-section container">
+        <h2>Свържете се с нас</h2>
+        <div class="location-contact-grid">
+
+            <!-- Колона 1: Карта -->
+            <div class="map-container">
+                <!--
+                  ВАЖНО: Трябва да замениш 'src' с твоя собствен Google Maps "Embed" линк.
+                  Това е ПРИМЕРНА карта, центрирана върху Търговище.
+                -->
+
+
+                <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2894.910181220693!2d26.57734551153857!3d43.24591257855761!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40af430fb406b35f%3A0x45b08d8acde214be!2zItCV0JvQmNCiIDE3INCf0JvQrtChIiDQntCe0JQ!5e1!3m2!1sbg!2sbg!4v1762127032766!5m2!1sbg!2sbg"                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+            <!-- Колона 2: Форма за контакт -->
+            <div class="contact-form">
+                <form action="/contact/send" method="POST"> <!-- Трябва да създадеш този endpoint -->
+                    <div>
+                        <input type="text" name="name" class="form-input" placeholder="Вашето име" required>
+                    </div>
+                    <div>
+                        <input type="email" name="email" class="form-input" placeholder="Вашият имейл" required>
+                    </div>
+                    <div>
+                        <input type="tel" name="phone" class="form-input" placeholder="Вашият телефон">
+                    </div>
+                    <div>
+                        <textarea name="message" class="form-textarea" placeholder="Вашето съобщение..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane" style="margin-right: 0.5rem;"></i>
+                        Изпрати запитване
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+    <!-- END: НОВА СЕКЦИЯ "ЛОКАЦИЯ И КОНТАКТИ" -->
+
 </main>
 <div th:insert="~{fragments/footer :: main-footer}"></div>
 
 </body>
 </html>
+
