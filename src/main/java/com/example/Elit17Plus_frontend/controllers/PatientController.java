@@ -2,9 +2,13 @@ package com.example.Elit17Plus_frontend.controllers;
 
 import com.example.Elit17Plus_frontend.clients.BenefitClient;
 import com.example.Elit17Plus_frontend.clients.PatientClient;
+import com.example.Elit17Plus_frontend.clients.VideoClient;
 import com.example.Elit17Plus_frontend.clients.VisitClient;
+import com.example.Elit17Plus_frontend.cloudflare.R2StorageService;
 import com.example.Elit17Plus_frontend.dtos.BenefitDTO;
 import com.example.Elit17Plus_frontend.dtos.PatientDTO;
+import com.example.Elit17Plus_frontend.dtos.VideoDTO;
+import com.example.Elit17Plus_frontend.dtos.VideoViewModel;
 import com.example.Elit17Plus_frontend.dtos.VisitDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +37,8 @@ public class PatientController {
     private final PatientClient patientClient;
     private final BenefitClient benefitClient;
     private final VisitClient visitClient;
+    private final VideoClient videoClient;
+    private final R2StorageService r2StorageService;
 
     @GetMapping
     public String getAllPatients(HttpServletRequest request, Model model) {
@@ -91,12 +97,43 @@ public class PatientController {
         String role = (String) request.getSession().getAttribute("sessionRole");
         if (!"ADMIN".equals(role)) return "redirect:/";
 
-        PatientDTO dto = patientClient.getPatientById(id, token);
-        List<VisitDTO> visits = visitClient.getForPatient(id, token);
-        model.addAttribute("patient", dto);
-        model.addAttribute("visits", visits);
-        return "Patient/patient";
+        try {
+            PatientDTO dto = patientClient.getPatientById(id, token);
+            List<VisitDTO> visits = visitClient.getForPatient(id, token);
+            List<VideoDTO> videos = videoClient.getAllForPatient(id, token);
 
+            // --- ТРАНСФОРМАЦИЯ НА VIDEO DTO ---
+            // Преобразуваме List<VideoDTO> (с 'key') в List<VideoViewModel> (с 'presignedUrl')
+            List<VideoViewModel> videoViewModels = videos.stream()
+                    .map(videoDTO -> {
+                        // 1. Вземи 'key' от DTO-то
+                        String r2Key = videoDTO.getKey();
+
+                        // 2. Генерирай временен URL
+                        String presignedUrl = r2StorageService.getPresignedVideoUrl(r2Key);
+
+                        // 3. Създай новия ViewModel
+                        return new VideoViewModel(
+                                videoDTO.getId(),
+                                videoDTO.getUploadDate(),
+                                presignedUrl, // Подаваме временния URL
+                                dto.getName() + " " + dto.getSurname() // Подаваме името на пациента
+                        );
+                    })
+                    .collect(Collectors.toList());
+            // --- КРАЙ НА ТРАНСФОРМАЦИЯТА ---
+
+            model.addAttribute("patient", dto);
+            model.addAttribute("visits", visits);
+            model.addAttribute("videos", videoViewModels); // Подаваме новия списък с ViewModels
+
+            return "Patient/patient";
+
+        } catch (Exception e) {
+            // TODO: По-добро показване на грешката
+            e.printStackTrace();
+            return "redirect:/patients?error=notfound";
+        }
     }
 
     @GetMapping("/edit/{id}")

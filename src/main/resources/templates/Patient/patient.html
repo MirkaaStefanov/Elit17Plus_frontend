@@ -197,24 +197,32 @@
         transform: translateY(-2px);
     }
 
-    .visits-section {
+    .visits-section, .video-section {
         margin-top: 3rem;
         padding-top: 2rem;
         border-top: 2px solid #eee;
     }
 
-    .visits-section h2 {
+    .visits-section h2, .video-section h2 {
         font-size: 1.75rem;
         font-weight: 600;
         margin-bottom: 1.5rem;
         color: var(--color-text-dark);
     }
 
-    .visit-list-card {
+    .visit-list-card, .video-upload-card {
         background-color: var(--color-light-bg);
         padding: 1.5rem;
         border-radius: var(--border-radius-md);
         border: 1px solid #ddd;
+        margin-bottom: 1.5rem; /* Добавено разстояние */
+    }
+
+    .video-list-card {
+         padding: 1rem;
+         display: grid;
+         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+         gap: 0.75rem;
     }
 
     .visit-item {
@@ -225,7 +233,19 @@
         border-bottom: 1px solid #e5e7eb;
     }
 
-    .visit-item:last-child {
+    .video-item {
+        padding: 0.75rem;
+        border-bottom: none;
+        gap: 0.5rem;
+        background-color: var(--color-card-bg);
+        border-radius: var(--border-radius-md);
+        border: 1px solid #ddd;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .visit-item:last-child, .video-item:last-child {
         border-bottom: none;
     }
 
@@ -235,10 +255,109 @@
         color: var(--color-text-dark);
     }
 
+    .video-item-date {
+        font-size: 0.875rem;
+        color: var(--color-text-light);
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 0.5rem;
+    }
+
     .visit-item .icon {
         color: var(--color-secondary-blue);
         font-size: 1.25rem;
     }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ccc;
+        border-radius: var(--border-radius-md);
+        background-color: white;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-input:focus {
+        border-color: var(--color-secondary-blue);
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+        outline: none;
+    }
+
+    video {
+        width: 100%;
+        border-radius: var(--border-radius-md);
+        border: 1px solid #ddd;
+    }
+
+    /* --- START: Нови стилове за Video Upload --- */
+    .file-input-hidden {
+        display: none; /* Скриваме истинския input */
+    }
+
+    .file-upload-drop-zone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2.5rem 1.5rem; /* По-голямо разстояние */
+        border: 2px dashed #ccc;
+        border-radius: var(--border-radius-md);
+        background-color: #fafafa;
+        text-align: center;
+        cursor: pointer;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+
+    .file-upload-drop-zone:hover {
+        background-color: #f4f4f4; /* Леко по-тъмно при hover */
+        border-color: var(--color-secondary-blue);
+    }
+
+    .file-upload-drop-zone .upload-icon {
+        font-size: 2.5rem;
+        color: var(--color-secondary-blue);
+        margin-bottom: 1rem;
+    }
+
+    .file-upload-drop-zone .upload-text {
+        font-weight: 500;
+        color: var(--color-text-light);
+    }
+
+    /* Ще се покаже, след като се избере файл */
+    .file-upload-drop-zone .file-name-text {
+        display: none;
+        margin-top: 1rem;
+        font-weight: 600;
+        color: var(--color-primary-red);
+    }
+    /* --- END: Нови стилове за Video Upload --- */
+
+
+    /* За съобщенията за статус */
+    #upload-status {
+        display: none;
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+    }
+    #upload-status.loading {
+        background-color: #e0f7fa;
+        color: #006064;
+        border: 1px solid #b2ebf2;
+    }
+    #upload-status.success {
+        background-color: #e8f5e9;
+        color: #1b5e20;
+        border: 1px solid #c8e6c9;
+    }
+    #upload-status.error {
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+
   </style>
 </head>
 <body>
@@ -305,7 +424,221 @@
     </div>
   </div>
 
+  <!-- =========== START: СЕКЦИЯ ЗА ВИДЕОКЛИПОВЕ (С НОВ JavaScript) =========== -->
+  <div class="video-section">
+    <h2>Видеоклипове</h2>
+
+    <div class="video-list-card">
+      <div th:if="${videos.isEmpty()}" class="text-gray-500 text-center py-4" style="grid-column: 1 / -1;">
+        Няма качени видеоклипове за този пациент.
+      </div>
+
+      <div th:each="video : ${videos}" class="video-item">
+
+        <div class="video-item-date">
+          <span class="font-medium">Качено на:</span>
+          <span th:text="${#temporals.format(video.uploadDate, 'dd MMMM yyyy г.')}"></span>
+        </div>
+
+        <video controls preload="metadata">
+          <source th:src="${video.presignedUrl}" type="video/mp4">
+          Вашият браузър не поддържа видео тага.
+        </video>
+      </div>
+    </div>
+
+    <!-- Секция за качване на ново видео (с нов дизайн) -->
+    <div class="video-upload-card">
+      <h3 class="text-lg font-semibold mb-3">Качване на ново видео</h3>
+
+      <form id="video-upload-form" th:action="@{/video/upload}" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" name="patientId" th:value="${patient.id}" />
+
+        <!-- START: Нов дизайн за качване -->
+        <div class="mb-4">
+          <!-- Скритият input е тук, но е невидим -->
+          <input type="file"
+                 name="multipartFile"
+                 id="videoFile"
+                 accept="video/*"
+                 required
+                 class="file-input-hidden" />
+
+          <!-- Това е новата, видима "drop zone", която е label за input-a -->
+          <label for="videoFile" class="file-upload-drop-zone">
+            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+            <span class="upload-text">Плъзнете файла тук или кликнете, за да изберете</span>
+            <span id="file-name-display" class="file-name-text"></span>
+          </label>
+        </div>
+        <!-- END: Нов дизайн за качване -->
+
+
+        <div class="flex justify-end">
+          <button type="submit" class="btn btn-secondary-blue" style="background-color: var(--color-secondary-blue); color: white;">
+            <i class="fas fa-upload mr-2"></i> Качи видео
+          </button>
+        </div>
+
+      </form>
+
+      <div id="upload-status"></div>
+    </div>
+  </div>
+  <!-- =========== END: СЕКЦИЯ ЗА ВИДЕОКЛИПОВЕ =========== -->
+
 </div>
+
+<!-- =========== START: JAVASCRIPT ЗА ДИРЕКТНО КАЧВАНЕ =========== -->
+<script th:inline="javascript">
+  /*<![CDATA[*/
+
+  // Взимаме елементите от страницата
+  const uploadForm = document.getElementById('video-upload-form');
+  const fileInput = document.getElementById('videoFile');
+  const statusEl = document.getElementById('upload-status');
+  const fileNameDisplay = document.getElementById('file-name-display');
+  const uploadText = document.querySelector('.upload-text');
+
+  // Взимаме ID-то на пациента от Thymeleaf
+  const patientId = /*[[${patient.id}]]*/ 'default-patient-id';
+
+  // *** НОВ КОД ***
+  // Добавяме event listener, за да покажем името на избрания файл
+  fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+          const fileName = fileInput.files[0].name;
+          fileNameDisplay.textContent = `Избран файл: ${fileName}`;
+          fileNameDisplay.style.display = 'block';
+          uploadText.style.display = 'none'; // Скриваме оригиналния текст
+      } else {
+          fileNameDisplay.style.display = 'none';
+          uploadText.style.display = 'block';
+      }
+  });
+  // *** КРАЙ НА НОВ КОД ***
+
+
+  // Добавяме event listener към формата
+  uploadForm.addEventListener('submit', async (event) => {
+
+      // 1. Спираме нормалното изпращане на формата
+      event.preventDefault();
+
+      const file = fileInput.files[0];
+      if (!file) {
+          showStatus('Моля, изберете файл.', 'error');
+          return;
+      }
+
+      // Показваме статус "Качване..."
+      showStatus('Качване на видео... Това може да отнеме известно време.', 'loading');
+      const uploadButton = uploadForm.querySelector('button[type="submit"]');
+      uploadButton.disabled = true; // Деактивираме бутона
+
+      try {
+          // 2. Стъпка 1: Искаме URL за качване от нашия Spring сървър
+          const urlResponse = await fetch('/video/generate-upload-url', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  filename: file.name,
+                  contentType: file.type
+              })
+          });
+
+          if (!urlResponse.ok) {
+              const errorData = await urlResponse.json();
+              throw new Error(`Неуспешно вземане на URL за качване. (Грешка ${urlResponse.status}: ${errorData.message || 'Няма съобщение'})`);
+          }
+
+          const { uploadUrl, key } = await urlResponse.json();
+
+          // 3. Стъпка 2: Качваме файла ДИРЕКТНО в R2, използвайки получения URL
+          showStatus('Качване в R2... (0%)', 'loading');
+
+          // За да следим прогреса, ще използваме XMLHttpRequest
+          await uploadFileWithProgress(uploadUrl, file, (progress) => {
+               showStatus(`Качване в R2... (${progress.toFixed(0)}%)`, 'loading');
+          });
+
+          showStatus('Файлът е качен в R2. Запазване на метаданни...', 'loading');
+
+          // 4. Стъпка 3: Уведомяваме нашия backend, че качването е приключило
+          // Създаваме нов, скрит формуляр, за да изпратим 'key' и 'patientId'
+          // и да задействаме redirect-а от VideoController
+
+          const notifyForm = document.createElement('form');
+          notifyForm.method = 'POST';
+          notifyForm.action = '/video/upload'; // Endpoint-ът, който очаква 'key' и 'patientId'
+
+          const keyInput = document.createElement('input');
+          keyInput.type = 'hidden';
+          keyInput.name = 'key';
+          keyInput.value = key;
+
+          const patientIdInput = document.createElement('input');
+          patientIdInput.type = 'hidden';
+          patientIdInput.name = 'patientId';
+          patientIdInput.value = patientId;
+
+          notifyForm.appendChild(keyInput);
+          notifyForm.appendChild(patientIdInput);
+
+          document.body.appendChild(notifyForm);
+          notifyForm.submit();
+
+      } catch (error) {
+          console.error('Грешка при качване:', error);
+          showStatus(`Грешка: ${error.message}`, 'error');
+          uploadButton.disabled = false; // Активираме бутона отново
+      }
+  });
+
+  // Помощна функция за показване на статус
+  function showStatus(message, type) {
+      statusEl.textContent = message;
+      statusEl.className = type; // 'loading', 'success', 'error'
+      statusEl.style.display = 'block';
+  }
+
+  // Помощна функция за качване с XMLHttpRequest, за да следим прогреса
+  function uploadFileWithProgress(url, file, onProgress) {
+      return new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('PUT', url, true);
+          xhr.setRequestHeader('Content-Type', file.type);
+
+          xhr.upload.onprogress = (event) => {
+              if (event.lengthComputable) {
+                  const percentComplete = (event.loaded / event.total) * 100;
+                  onProgress(percentComplete);
+              }
+          };
+
+          xhr.onload = () => {
+              if (xhr.status >= 200 && xhr.status < 300) {
+                  resolve(xhr.response);
+              } else {
+                  reject(new Error(`Качването в R2 се провали със статус ${xhr.status}`));
+              }
+          };
+
+          xhr.onerror = () => {
+              reject(new Error('Мрежова грешка при качване в R2.'));
+          };
+
+          xhr.send(file);
+      });
+  }
+
+  /*]]>*/
+</script>
+<!-- =========== END: JAVASCRIPT ЗА ДИРЕКТНО КАЧВАНЕ =========== -->
 
 </body>
 </html>
+
