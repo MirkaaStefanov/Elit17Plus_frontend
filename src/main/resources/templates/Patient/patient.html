@@ -243,6 +243,7 @@
         box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         display: flex;
         flex-direction: column;
+        flex-shrink: 0;
     }
 
     .visit-item:last-child, .video-item:last-child {
@@ -287,6 +288,12 @@
         width: 100%;
         border-radius: var(--border-radius-md);
         border: 1px solid #ddd;
+
+        /* --- START: Промяна за еднакъв размер БЕЗ изрязване --- */
+        aspect-ratio: 16 / 9;     /* Задаваме стандартно съотношение 16:9 */
+        object-fit: contain;  /* ПРОМЕНЕНО: Побира видеото в рамката, добавяйки черни ленти */
+        background-color: #000;   /* Черен фон за празното място (черните ленти) */
+        /* --- END: Промяна --- */
     }
 
     /* --- START: Нови стилове за Video Upload --- */
@@ -313,6 +320,11 @@
         border-color: var(--color-secondary-blue);
     }
 
+    .file-upload-drop-zone.dragover { /* Нов стил за drag-over */
+        background-color: #f0f8ff;
+        border-color: var(--color-primary-red);
+    }
+
     .file-upload-drop-zone .upload-icon {
         font-size: 2.5rem;
         color: var(--color-secondary-blue);
@@ -324,7 +336,6 @@
         color: var(--color-text-light);
     }
 
-    /* Ще се покаже, след като се избере файл */
     .file-upload-drop-zone .file-name-text {
         display: none;
         margin-top: 1rem;
@@ -466,7 +477,7 @@
                  class="file-input-hidden" />
 
           <!-- Това е новата, видима "drop zone", която е label за input-a -->
-          <label for="videoFile" class="file-upload-drop-zone">
+          <label for="videoFile" id="file-drop-zone" class="file-upload-drop-zone">
             <i class="fas fa-cloud-upload-alt upload-icon"></i>
             <span class="upload-text">Плъзнете файла тук или кликнете, за да изберете</span>
             <span id="file-name-display" class="file-name-text"></span>
@@ -500,11 +511,41 @@
   const statusEl = document.getElementById('upload-status');
   const fileNameDisplay = document.getElementById('file-name-display');
   const uploadText = document.querySelector('.upload-text');
+  const dropZone = document.getElementById('file-drop-zone'); // *** НОВ РЕД ***
 
   // Взимаме ID-то на пациента от Thymeleaf
   const patientId = /*[[${patient.id}]]*/ 'default-patient-id';
 
-  // *** НОВ КОД ***
+  // --- START: НОВИ Event Listeners за Drag & Drop ---
+
+  // Добавяме клас, когато файл е "провлачен" върху зоната
+  dropZone.addEventListener('dragover', (event) => {
+      event.preventDefault(); // Задължително, за да работи 'drop'
+      dropZone.classList.add('dragover');
+  });
+
+  // Премахваме класа, когато файлът напусне зоната
+  dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+  });
+
+  // Обработваме "пускането" на файла
+  dropZone.addEventListener('drop', (event) => {
+      event.preventDefault(); // Спираме браузъра да отвори файла
+      dropZone.classList.remove('dragover');
+
+      if (event.dataTransfer.files.length) {
+          // Прикачаме "пуснатия" файл към нашия скрит input
+          fileInput.files = event.dataTransfer.files;
+
+          // Ръчно задействаме 'change' event-а, за да се обнови UI-a
+          const changeEvent = new Event('change');
+          fileInput.dispatchEvent(changeEvent);
+      }
+  });
+  // --- END: НОВИ Event Listeners за Drag & Drop ---
+
+
   // Добавяме event listener, за да покажем името на избрания файл
   fileInput.addEventListener('change', () => {
       if (fileInput.files.length > 0) {
@@ -517,7 +558,6 @@
           uploadText.style.display = 'block';
       }
   });
-  // *** КРАЙ НА НОВ КОД ***
 
 
   // Добавяме event listener към формата
