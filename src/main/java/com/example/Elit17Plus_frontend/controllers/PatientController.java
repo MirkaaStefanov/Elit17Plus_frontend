@@ -180,6 +180,7 @@ public class PatientController {
         existing.setName(patientDTO.getName());
         existing.setSurname(patientDTO.getSurname());
         existing.setEgn(patientDTO.getEgn());
+        existing.setDescription(patientDTO.getDescription());
 
         // Update benefits based on the submitted list of IDs
         if (patientDTO.getBenefitIds() != null && !patientDTO.getBenefitIds().isEmpty()) {

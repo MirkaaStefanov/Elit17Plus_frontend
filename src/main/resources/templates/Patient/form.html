@@ -73,8 +73,9 @@
         margin-bottom: 0.5rem;
     }
     input[type="text"],
-    input[type="number"], /* If you have number inputs */
-    select {
+    input[type="number"],
+    select,
+    textarea { /* <-- ДОБАВЕНО: textarea вече ще изглежда като другите полета */
         border-radius: var(--border-radius-md);
         border: 1px solid #ddd;
         padding: 0.9rem 1.2rem; /* Increased padding */
@@ -83,10 +84,22 @@
         font-size: 1rem;
         color: var(--color-text-dark); /* Ensure text color is dark */
         background-color: var(--color-light-bg); /* Slightly off-white background */
+        font-family: 'Poppins', sans-serif; /* Гарантираме, че ползва същия шрифт */
+        resize: vertical; /* Позволяваме само вертикално оразмеряване */
+        min-height: 120px; /* Минимална височина за textarea */
     }
+
+    /* Настройваме височината за input полетата да не е 120px */
+    input[type="text"],
+    input[type="number"],
+    select {
+        min-height: auto;
+    }
+
     input[type="text"]:focus,
     input[type="number"]:focus,
-    select:focus {
+    select:focus,
+    textarea:focus { /* <-- ДОБАВЕНО: textarea ще има същия фокус */
         outline: none;
         border-color: var(--color-primary-red); /* Changed focus color to red */
         box-shadow: 0 0 0 4px rgba(255, 87, 34, 0.2); /* Red shadow */
@@ -228,6 +241,15 @@
       <input type="text" id="egn" th:field="*{egn}" required>
     </div>
 
+    <!-- =========== START: НОВО ПОЛЕ ЗА ОПИСАНИЕ =========== -->
+    <div class="input-group">
+      <label for="description">История / Диагноза / Лечение</label>
+      <textarea id="description" th:field="*{description}"
+                placeholder="Въведете анамнеза, статус, проведено лечение..."></textarea>
+    </div>
+    <!-- =========== END: НОВО ПОЛЕ ЗА ОПИСАНИЕ =========== -->
+
+
     <div class="input-group">
       <label>Снимка</label>
       <div class="file-input-wrapper">
@@ -249,7 +271,7 @@
       </div>
     </div>
     <div>
-      <button type="submit" class="btn-submit">Запази</button>
+      <button type="submit" class="btn-submit">Запази</Cbutton>
     </div>
   </form>
 </div>
